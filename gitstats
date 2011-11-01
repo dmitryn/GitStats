@@ -14,7 +14,10 @@ import sys
 import time
 import zlib
 
-GNUPLOT_COMMON = 'set terminal png transparent\nset size 1.0,0.5\n'
+IMAGE_TYPE = 'svg'  # everything that gnuplot accepts, I guess 
+GNUPLOT_IMAGE_SPECIFICATIONS = {'svg':'','png':'transparent'} 
+
+GNUPLOT_COMMON = 'set terminal {0} {1}\nset size 1.0,0.5\n'.format(IMAGE_TYPE, GNUPLOT_IMAGE_SPECIFICATIONS[IMAGE_TYPE] )
 ON_LINUX = (platform.system() == 'Linux')
 
 exectime_internal = 0.0
@@ -647,7 +650,7 @@ class HTMLReportCreator(ReportCreator):
 			else:
 				f.write('<td>0.00</td>')
 		f.write('</tr></table>')
-		f.write('<img src="hour_of_day.png" alt="Hour of Day" />')
+		f.write('<img src="hour_of_day.{0}" alt="Hour of Day" />'.format(IMAGE_TYPE))
 		fg = open(path + '/hour_of_day.dat', 'w')
 		for i in range(0, 24):
 			if i in hour_of_day:
@@ -675,7 +678,7 @@ class HTMLReportCreator(ReportCreator):
 				f.write('<td>0</td>')
 			f.write('</tr>')
 		f.write('</table></div>')
-		f.write('<img src="day_of_week.png" alt="Day of Week" />')
+		f.write('<img src="day_of_week.{0}" alt="Day of Week" />'.format(IMAGE_TYPE))
 		fp.close()
 
 		# Hour of Week
@@ -718,7 +721,7 @@ class HTMLReportCreator(ReportCreator):
 			fp.write('%d %d\n' % (mm, commits))
 		fp.close()
 		f.write('</table></div>')
-		f.write('<img src="month_of_year.png" alt="Month of Year" />')
+		f.write('<img src="month_of_year.{0}" alt="Month of Year" />'.format(IMAGE_TYPE))
 
 		# Commits by year/month
 		f.write(html_header(2, 'Commits by year/month'))
@@ -726,7 +729,7 @@ class HTMLReportCreator(ReportCreator):
 		for yymm in reversed(sorted(data.commits_by_month.keys())):
 			f.write('<tr><td>%s</td><td>%d</td></tr>' % (yymm, data.commits_by_month[yymm]))
 		f.write('</table></div>')
-		f.write('<img src="commits_by_year_month.png" alt="Commits by year/month" />')
+		f.write('<img src="commits_by_year_month.{0}" alt="Commits by year/month" />'.format(IMAGE_TYPE))
 		fg = open(path + '/commits_by_year_month.dat', 'w')
 		for yymm in sorted(data.commits_by_month.keys()):
 			fg.write('%s %s\n' % (yymm, data.commits_by_month[yymm]))
@@ -738,7 +741,7 @@ class HTMLReportCreator(ReportCreator):
 		for yy in reversed(sorted(data.commits_by_year.keys())):
 			f.write('<tr><td>%s</td><td>%d (%.2f%%)</td></tr>' % (yy, data.commits_by_year[yy], (100.0 * data.commits_by_year[yy]) / data.getTotalCommits()))
 		f.write('</table></div>')
-		f.write('<img src="commits_by_year.png" alt="Commits by Year" />')
+		f.write('<img src="commits_by_year.{0}" alt="Commits by Year" />'.format(IMAGE_TYPE))
 		fg = open(path + '/commits_by_year.dat', 'w')
 		for yy in sorted(data.commits_by_year.keys()):
 			fg.write('%d %d\n' % (yy, data.commits_by_year[yy]))
@@ -823,7 +826,7 @@ class HTMLReportCreator(ReportCreator):
 			fp.write('%s %d %d\n' % (domain, n , info['commits']))
 			f.write('<tr><th>%s</th><td>%d (%.2f%%)</td></tr>' % (domain, info['commits'], (100.0 * info['commits'] / totalcommits)))
 		f.write('</table></div>')
-		f.write('<img src="domains.png" alt="Commits by Domains" />')
+		f.write('<img src="domains.{0}" alt="Commits by Domains" />'.format(IMAGE_TYPE))
 		fp.close()
 
 		f.write('</body></html>')
@@ -857,7 +860,7 @@ class HTMLReportCreator(ReportCreator):
 		#	fg.write('%s %d\n' % (datetime.datetime.fromtimestamp(stamp).strftime('%Y-%m-%d'), data.files_by_stamp[stamp]))
 		fg.close()
 			
-		f.write('<img src="files_by_date.png" alt="Files by Date" />')
+		f.write('<img src="files_by_date.{0}" alt="Files by Date" />'.format(IMAGE_TYPE))
 
 		#f.write('<h2>Average file size by date</h2>')
 
@@ -885,7 +888,7 @@ class HTMLReportCreator(ReportCreator):
 		f.write('</dl>\n')
 
 		f.write(html_header(2, 'Lines of Code'))
-		f.write('<img src="lines_of_code.png" />')
+		f.write('<img src="lines_of_code.{0}" />'.format(IMAGE_TYPE))
 
 		fg = open(path + '/lines_of_code.dat', 'w')
 		for stamp in sorted(data.changes_by_date.keys()):
@@ -933,14 +936,14 @@ class HTMLReportCreator(ReportCreator):
 		f.write(GNUPLOT_COMMON)
 		f.write(
 """
-set output 'hour_of_day.png'
+set output 'hour_of_day.{0}'
 unset key
 set xrange [0.5:24.5]
 set xtics 4
 set grid y
 set ylabel "Commits"
 plot 'hour_of_day.dat' using 1:2:(0.5) w boxes fs solid
-""")
+""".format(IMAGE_TYPE))
 		f.close()
 
 		# day of week
@@ -948,14 +951,14 @@ plot 'hour_of_day.dat' using 1:2:(0.5) w boxes fs solid
 		f.write(GNUPLOT_COMMON)
 		f.write(
 """
-set output 'day_of_week.png'
+set output 'day_of_week.{0}'
 unset key
 set xrange [0.5:7.5]
 set xtics 1
 set grid y
 set ylabel "Commits"
 plot 'day_of_week.dat' using 1:2:(0.5) w boxes fs solid
-""")
+""".format(IMAGE_TYPE))
 		f.close()
 
 		# Domains
@@ -963,13 +966,13 @@ plot 'day_of_week.dat' using 1:2:(0.5) w boxes fs solid
 		f.write(GNUPLOT_COMMON)
 		f.write(
 """
-set output 'domains.png'
+set output 'domains.{0}'
 unset key
 unset xtics
 set grid y
 set ylabel "Commits"
 plot 'domains.dat' using 2:3:(0.5) with boxes fs solid, '' using 2:3:1 with labels rotate by 45 offset 0,1
-""")
+""".format(IMAGE_TYPE))
 		f.close()
 
 		# Month of Year
@@ -977,14 +980,14 @@ plot 'domains.dat' using 2:3:(0.5) with boxes fs solid, '' using 2:3:1 with labe
 		f.write(GNUPLOT_COMMON)
 		f.write(
 """
-set output 'month_of_year.png'
+set output 'month_of_year.{0}'
 unset key
 set xrange [0.5:12.5]
 set xtics 1
 set grid y
 set ylabel "Commits"
 plot 'month_of_year.dat' using 1:2:(0.5) w boxes fs solid
-""")
+""".format(IMAGE_TYPE))
 		f.close()
 
 		# commits_by_year_month
@@ -992,7 +995,7 @@ plot 'month_of_year.dat' using 1:2:(0.5) w boxes fs solid
 		f.write(GNUPLOT_COMMON)
 		f.write(
 """
-set output 'commits_by_year_month.png'
+set output 'commits_by_year_month.{0}'
 unset key
 set xdata time
 set timefmt "%Y-%m"
@@ -1002,7 +1005,7 @@ set bmargin 5
 set grid y
 set ylabel "Commits"
 plot 'commits_by_year_month.dat' using 1:2:(0.5) w boxes fs solid
-""")
+""".format(IMAGE_TYPE))
 		f.close()
 
 		# commits_by_year
@@ -1010,14 +1013,14 @@ plot 'commits_by_year_month.dat' using 1:2:(0.5) w boxes fs solid
 		f.write(GNUPLOT_COMMON)
 		f.write(
 """
-set output 'commits_by_year.png'
+set output 'commits_by_year.{0}'
 unset key
 set xtics 1 rotate by 90
 set grid y
 set ylabel "Commits"
 set yrange [0:]
 plot 'commits_by_year.dat' using 1:2:(0.5) w boxes fs solid
-""")
+""".format(IMAGE_TYPE))
 		f.close()
 
 		# Files by date
@@ -1025,7 +1028,7 @@ plot 'commits_by_year.dat' using 1:2:(0.5) w boxes fs solid
 		f.write(GNUPLOT_COMMON)
 		f.write(
 """
-set output 'files_by_date.png'
+set output 'files_by_date.{0}'
 unset key
 set xdata time
 set timefmt "%Y-%m-%d"
@@ -1036,7 +1039,7 @@ set xtics rotate by 90
 set ytics autofreq
 set bmargin 6
 plot 'files_by_date.dat' using 1:2 w steps
-""")
+""".format(IMAGE_TYPE))
 		f.close()
 
 		# Lines of Code
@@ -1044,7 +1047,7 @@ plot 'files_by_date.dat' using 1:2 w steps
 		f.write(GNUPLOT_COMMON)
 		f.write(
 """
-set output 'lines_of_code.png'
+set output 'lines_of_code.{0}'
 unset key
 set xdata time
 set timefmt "%s"
@@ -1054,7 +1057,7 @@ set ylabel "Lines"
 set xtics rotate by 90
 set bmargin 6
 plot 'lines_of_code.dat' using 1:2 w lines
-""")
+""".format(IMAGE_TYPE))
 		f.close()
 
 		os.chdir(path)
