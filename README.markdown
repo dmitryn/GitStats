@@ -22,6 +22,7 @@ Suppose you have a git project at /mnt/src/git/project
 and you want to save the statistics to ~/public_html/project
 
 You would run:
+
     $ ./git-stats /mnt/src/git/project ~/public_html/project
 
 or with git-stats executable in your PATH:
