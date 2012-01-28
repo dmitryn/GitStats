@@ -23,7 +23,9 @@ and you want to save the statistics to ~/public_html/project
 
 You would run:
     $ ./git-stats /mnt/src/git/project ~/public_html/project
+
 or with git-stats executable in your PATH:
+
     $ git stats /mnt/src/git/project ~/public_html/project
 
 (go grab a cup of coffee if it's a large project :)
