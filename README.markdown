@@ -6,7 +6,7 @@ Currently it produces only HTML output with tables and graphs.
 
 ## Requirements
 
-- Python (>= 2.4.4)
+- Python (>= 2.4.4) (python3 is not supported)
 - Git (>= 1.5.2.4)
 - Gnuplot (>= 4.0.0)
 - a git repository (bare clone will work as well)
