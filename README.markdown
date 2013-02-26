@@ -30,7 +30,8 @@ or with git-stats executable in your PATH:
     $ git stats /mnt/src/git/project ~/public_html/project
 
 (go grab a cup of coffee if it's a large project :)
-    $ sensible-browser ~/public_html/project/index.html
+    
+    $ open ~/public_html/project/index.html
 
 ## Recommended
 
