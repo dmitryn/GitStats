@@ -4,6 +4,9 @@ for developers, as a way to check some development statistics for a project.
 
 Currently it produces only HTML output with tables and graphs.
 
+## How it looks
+Look is very simple, couple of screenshots here: https://goo.gl/qnVGTg https://goo.gl/LkEF4v
+
 ## Requirements
 
 - Python (>= 2.4.4) (python3 is not supported)
