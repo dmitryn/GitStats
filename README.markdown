@@ -4,8 +4,17 @@ for developers, as a way to check some development statistics for a project.
 
 Currently it produces only HTML output with tables and graphs.
 
-## How it looks
-Look is very simple, couple of screenshots here: https://goo.gl/qnVGTg https://goo.gl/LkEF4v
+## Features
+Here is a list of some statistics generated currently:
+
+* General statistics: total files, lines, commits, authors.
+* Activity: commits by hour of day, day of week, hour of week, month of year, year and month, and year.
+* Authors: list of authors (name, commits (%), first commit date, last commit date, age), author of month, author of year.
+* Files: file count by date, extensions
+* Lines: Lines of Code by date
+
+## Demo
+http://gitstats.sourceforge.net/examples/gitstats/
 
 ## Requirements
 
