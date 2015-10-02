@@ -58,6 +58,7 @@ or with git-stats executable in your PATH:
 4.  Go in the repo where you unzip GitStats with cd
 
 5.  Use command 
+
     
     $ python git-stats <input-file> <output-file>
 
