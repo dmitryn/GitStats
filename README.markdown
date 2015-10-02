@@ -45,6 +45,21 @@ or with git-stats executable in your PATH:
     
     $ open ~/public_html/project/index.html
 
+## Install for windows 7
+
+Add python to PATH following [link](http://stackoverflow.com/questions/3701646/how-to-add-to-the-pythonpath-in-windows-7)(working with answer from Delicia Brummitt)
+Add git to PATH following [Link](http://blog.countableset.ch/2012/06/07/adding-git-to-windows-7-path/)
+
+Unzip GitStats in your favorite repo
+
+Open a terminal windows+r then write cmd
+
+Go in the repo where you unzip GitStats with cd
+
+Use command $python git-stats <input-file> <output-file>
+
+python
+
 ## Recommended
 
 - Lots of memory and fast disk for large projects
