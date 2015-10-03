@@ -39,7 +39,7 @@ You would run:
 
 or with git-stats executable in your PATH:
 
-    $ git stats /mnt/src/git/project ~/public_html/project
+    $ git-stats /mnt/src/git/project ~/public_html/project
 
 (go grab a cup of coffee if it's a large project :)
     
