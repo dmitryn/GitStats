@@ -1,8 +1,8 @@
 # gitstats Docker image
 Forked from https://github.com/dmitryn/GitStats to package gitstats in a
-Docker image with all prerequisites:
+Docker image with Python 2 and all other prerequisites.
 
-[jk4ger/gitstats](https://hub.docker.com/repository/docker/jk4ger/gitstats)
+Docker image: [jk4ger/gitstats](https://hub.docker.com/repository/docker/jk4ger/gitstats)
 
 See the [original README](README.original.md) for documentation of gitstats itself.
 
