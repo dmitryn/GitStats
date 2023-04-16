@@ -1,0 +1,22 @@
+# Updates the release draft with the pull requests since the last release.
+
+name: Release Draft
+
+on:
+  push:
+    # Branches to consider
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  update_release_draft:
+    name: Update release draft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v5
+        with:
+          # Path is relative to .github/
+          config-name: release-drafter.yml
+        env:
+          GITHUB_TOKEN: ${{github.token}}
