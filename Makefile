@@ -9,9 +9,11 @@ build:
 	docker build -t $(DOCKERIMAGE) --progress=plain .
 
 run:
-	docker run --rm \
+	docker run \
+      --user $(shell id -u):$(shell id -g) \
       -v "$(REPO_DIR):/repo:ro" \
       -v "$(OUTDIR):/out" \
+      --rm \
       $(DOCKERIMAGE)
 
 test: clean run check-output
