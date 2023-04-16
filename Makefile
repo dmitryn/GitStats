@@ -4,10 +4,10 @@ DOCKERFILE=Dockerfile
 OUTDIR=./out
 OUT_INDEX=$(OUTDIR)/index.html
 
-image:
+build:
 	docker build -t $(DOCKERIMAGE) --progress=plain .
 
-run: image
+run:
 	docker-compose run gitstats
 
 test: clean run check-output
@@ -18,4 +18,4 @@ check-output:
 clean:
 	find $(OUTDIR) -mindepth 1 -not -name .gitignore | xargs -l rm -fv
 
-.PHONY: run image clean
+.PHONY: build run test check-output clean
