@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  gitstats:
+    image: gitstats:local
+    build: .
+    volumes:
+      - ${GIT_REPO_DIR:-.}:/repo:ro
+      - ${OUTPUT_DIR:-./out}:/out

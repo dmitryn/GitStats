@@ -7,6 +7,9 @@ VERSION=$(shell git describe 2>/dev/null || git rev-parse --short HEAD)
 SEDVERSION=sed -ie 's/VERSION = 0/VERSION = "$(VERSION)"/'
 OUTDIR=./out
 
+DOCKERIMAGE=gitstats:local
+DOCKERFILE=Dockerfile
+
 all: help
 
 help:
@@ -32,7 +35,13 @@ release:
 run:
 	python2 ./git-stats . $(OUTDIR)
 
+docker-run: docker-image
+	docker-compose run gitstats
+
+docker-image:
+	docker build -t $(DOCKERIMAGE) --progress=plain .
+
 clean:
 	rm -rf $(OUTDIR)
 
-.PHONY: all help install release run clean
+.PHONY: all help install release run docker-run docker-image clean
