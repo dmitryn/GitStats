@@ -73,7 +73,13 @@ jobs:
         with:
           context: .
           push: ${{github.event_name == 'push' && github.ref_type == 'tag'}}
-          tags: ${{steps.meta.outputs.tags}}
+          load: true
+          tags: |
+            ${{env.docker_image}}:local
+            ${{steps.meta.outputs.tags}}
           labels: ${{steps.meta.outputs.labels}}
           cache-from: type=local,src=${{env.docker_cache_in}}
           cache-to: type=local,mode=max,dest=${{env.docker_cache_out}}
+
+      - name: Test Docker image
+        run: make test
