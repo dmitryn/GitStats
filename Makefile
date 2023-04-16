@@ -1,14 +1,6 @@
-PREFIX=/usr/local
-BINDIR=$(PREFIX)/bin
-RESOURCEDIR=$(PREFIX)/share/gitstats
-RESOURCES=gitstats.css sortable.js *.gif
-BINARIES=git-stats
-VERSION=$(shell git describe 2>/dev/null || git rev-parse --short HEAD)
-SEDVERSION=sed -ie 's/VERSION = 0/VERSION = "$(VERSION)"/'
-OUTDIR=./out
-
 DOCKERIMAGE=jk4ger/gitstats:local
 DOCKERFILE=Dockerfile
+OUTDIR=./out
 
 run: image
 	docker-compose run gitstats
