@@ -10,12 +10,7 @@ RUN apk update && \
       git  \
       gnuplot \
       python2 && \
-    python -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-    pip install --upgrade pip setuptools && \
-    rm -rf \
-      /root/.cache \
-      /var/cache/apk/* && \
+    rm -rfv /var/cache/apk/* && \
     python --version
 
 WORKDIR /app
