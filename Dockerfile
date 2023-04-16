@@ -1,7 +1,7 @@
 # alpine:3.15 is the last version where the package python2 is still available.
 FROM alpine:3.15
 
-# This hack is widely applied to avoid python printing issues in docker containers.
+# Avoid issues with printing to stdout/stderr in Docker containers.
 # See: https://github.com/Docker-Hub-frolvlad/docker-alpine-python3/pull/13
 ENV PYTHONUNBUFFERED=1
 
