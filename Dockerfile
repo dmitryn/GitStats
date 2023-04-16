@@ -6,11 +6,16 @@ FROM alpine:3.15
 ENV PYTHONUNBUFFERED=1
 
 RUN apk update && \
-    apk add --no-cache git gnuplot python2 && \
+    apk add --no-cache \
+      git  \
+      gnuplot \
+      python2 && \
     python -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
     pip install --upgrade pip setuptools && \
-    rm -r /root/.cache && \
+    rm -rf \
+      /root/.cache \
+      /var/cache/apk/* && \
     python --version
 
 WORKDIR /app
