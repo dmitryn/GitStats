@@ -67,4 +67,4 @@ jobs:
         with:
           name: git-stats-output
           path: ./out
-        retention-days: 3
+          retention-days: 3
