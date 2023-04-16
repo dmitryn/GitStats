@@ -29,10 +29,10 @@ release:
 	@tar --owner=0 --group=0 --transform 's!^!gitstats/!' --transform 's!gitstats.tmp!gitstats!' -zcf gitstats-$(VERSION).tar.gz git-stats.tmp $(RESOURCES) doc/ Makefile
 	@$(RM) git-stats.tmp
 
-test:
+run:
 	python2 ./git-stats . $(OUTDIR)
 
 clean:
 	rm -rf $(OUTDIR)
 
-.PHONY: all help install release test clean
+.PHONY: all help install release run clean
