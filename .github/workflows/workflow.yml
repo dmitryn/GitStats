@@ -1,0 +1,63 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+**
+
+  pull_request:
+
+  workflow_dispatch:
+
+  schedule:
+    - cron: '30 0 * * 1'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    env:
+      docker_image: jk4ger/gitstats-docker
+      docker_cache_in: /tmp/.buildx-cache
+      docker_cache_out: /tmp/.buildx-cache-new
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Determine metadata for Docker image
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{env.docker_image}}
+          # type=semver is only active on workflow trigger "push".
+          # It will automatically add the tag "latest" on release tags (e.g. "v1.2.3", not on "v1.2.3-rc.1").
+          # We always move the tag "latest-dev" to every new image.
+          tags: |
+            type=raw,value=latest-dev
+            type=semver,pattern={{major}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{version}}
+            type=semver,pattern=v{{major}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern={{raw}}
+            type=sha
+            type=sha,format=long
+          labels: |
+            org.opencontainers.image.title=git-stats
+            org.opencontainers.image.authors=Jens Kager <jens.kager@gmail.com>
+            org.opencontainers.image.version=${{github.ref_name}}
+
+      - name: Set up Python 2.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 2.7
+
+      - name: Install gnuplot
+        run: sudo apt-get install -y gnuplot
+
+      - name: Run git-stats
+        run: ./git-stats . ./out
