@@ -9,6 +9,7 @@ Run with Docker:
 ```bash
 REPO_DIR="./"
 OUT_DIR="./out"
+
 docker run --rm \
   -v "$REPO_DIR:/repo:ro" \
   -v "$OUT_DIR:/out" \
