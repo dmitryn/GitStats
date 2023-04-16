@@ -1,0 +1,4 @@
+# Ensure that the directory is created on git checkout with user ownership,
+# rather than by Docker on container startup with root ownership.
+!.gitignore
+*
