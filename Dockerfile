@@ -14,8 +14,10 @@ RUN apk update && \
     python --version
 
 WORKDIR /app
-
 COPY . .
 
-RUN git config --global --add safe.directory /repo
-ENTRYPOINT exec python -u git-stats /repo /out
+ENV REPO_DIR=/repo
+ENV OUT_DIR=/out
+
+RUN git config --global --add safe.directory $REPO_DIR
+ENTRYPOINT exec python -u git-stats $REPO_DIR $OUT_DIR
