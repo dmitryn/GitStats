@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   gitstats:
-    image: gitstats:local
+    image: jk4ger/gitstats:local
     build: .
     volumes:
       - ${GIT_REPO_DIR:-.}:/repo:ro

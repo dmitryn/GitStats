@@ -20,13 +20,19 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     env:
-      docker_image: jk4ger/gitstats-docker
+      docker_image: jk4ger/gitstats
       docker_cache_in: /tmp/.buildx-cache
       docker_cache_out: /tmp/.buildx-cache-new
 
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
 
       - name: Determine metadata for Docker image
         id: meta
@@ -51,20 +57,23 @@ jobs:
             org.opencontainers.image.authors=Jens Kager <jens.kager@gmail.com>
             org.opencontainers.image.version=${{github.ref_name}}
 
-      - name: Set up Python 2.7
-        uses: actions/setup-python@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Allows re-using the build cache across workflow runs.
+      - name: Restore Docker build cache
+        uses: actions/cache@v3
         with:
-          python-version: 2.7
+          path: ${{env.docker_cache_in}}
+          key: docker-build-cache-${{github.sha}}
+          restore-keys: docker-build-cache
 
-      - name: Install gnuplot
-        run: sudo apt-get install -y gnuplot
-
-      - name: Run git-stats
-        run: make run
-
-      - name: Publish output as artifact
-        uses: actions/upload-artifact@v2
+      - name: Build/push Docker image
+        uses: docker/build-push-action@v4
         with:
-          name: git-stats-output
-          path: ./out
-          retention-days: 3
+          context: .
+          push: ${{github.event_name == 'push' && github.ref_type == 'tag'}}
+          tags: ${{steps.meta.outputs.tags}}
+          labels: ${{steps.meta.outputs.labels}}
+          cache-from: type=local,src=${{env.docker_cache_in}}
+          cache-to: type=local,mode=max,dest=${{env.docker_cache_out}}

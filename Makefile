@@ -7,7 +7,7 @@ VERSION=$(shell git describe 2>/dev/null || git rev-parse --short HEAD)
 SEDVERSION=sed -ie 's/VERSION = 0/VERSION = "$(VERSION)"/'
 OUTDIR=./out
 
-DOCKERIMAGE=gitstats:local
+DOCKERIMAGE=jk4ger/gitstats:local
 DOCKERFILE=Dockerfile
 
 all: help
