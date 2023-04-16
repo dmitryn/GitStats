@@ -5,6 +5,7 @@ RESOURCES=gitstats.css sortable.js *.gif
 BINARIES=git-stats
 VERSION=$(shell git describe 2>/dev/null || git rev-parse --short HEAD)
 SEDVERSION=sed -ie 's/VERSION = 0/VERSION = "$(VERSION)"/'
+OUTDIR=./out
 
 all: help
 
@@ -28,4 +29,10 @@ release:
 	@tar --owner=0 --group=0 --transform 's!^!gitstats/!' --transform 's!gitstats.tmp!gitstats!' -zcf gitstats-$(VERSION).tar.gz git-stats.tmp $(RESOURCES) doc/ Makefile
 	@$(RM) git-stats.tmp
 
-.PHONY: all help install release
+test:
+	python2 ./git-stats . $(OUTDIR)
+
+clean:
+	rm -rf $(OUTDIR)
+
+.PHONY: all help install release test clean
