@@ -1,6 +1,7 @@
 DOCKERIMAGE=jk4ger/gitstats:local
 DOCKERFILE=Dockerfile
 
+REPO_DIR=./
 OUTDIR=./out
 OUT_INDEX=$(OUTDIR)/index.html
 
@@ -8,7 +9,10 @@ build:
 	docker build -t $(DOCKERIMAGE) --progress=plain .
 
 run:
-	docker-compose run gitstats
+	docker run --rm \
+      -v "$(REPO_DIR):/repo:ro" \
+      -v "$(OUTDIR):/out" \
+      $(DOCKERIMAGE)
 
 test: clean run check-output
 
