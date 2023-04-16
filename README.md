@@ -7,7 +7,9 @@ See the [original README](README.original.md) for documentation of gitstats itse
 ## Usage
 Run with Docker:
 ```bash
+# Path to git repository.
 REPO_DIR="./"
+# Path to output directory.
 OUT_DIR="./out"
 
 docker run --rm \
