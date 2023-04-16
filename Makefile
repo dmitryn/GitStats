@@ -42,6 +42,6 @@ docker-image:
 	docker build -t $(DOCKERIMAGE) --progress=plain .
 
 clean:
-	rm -rf $(OUTDIR)
+	find $(OUTDIR) -mindepth 1 -not -name .gitignore | xargs -l rm -fv
 
 .PHONY: all help install release run docker-run docker-image clean
