@@ -53,7 +53,7 @@ jobs:
             type=sha
             type=sha,format=long
           labels: |
-            org.opencontainers.image.title=git-stats
+            org.opencontainers.image.title=gitstats
             org.opencontainers.image.authors=Jens Kager <jens.kager@gmail.com>
             org.opencontainers.image.version=${{github.ref_name}}
 
