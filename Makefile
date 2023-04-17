@@ -18,13 +18,16 @@ UID=$(shell id -u)
 GID=$(shell id -g)
 USER=$(UID):$(GID)
 
+# Build the Docker image.
 .PHONY: build
 build:
 	docker build -t $(DOCKERIMAGE) --progress=plain .
 
+# Rebuild and run.
 .PHONY: run
 run: build run-ci
 
+# Run (without rebuild).
 .PHONY: run-ci
 run-ci:
 	docker run \
@@ -34,16 +37,20 @@ run-ci:
 		--rm \
 		$(DOCKERIMAGE)
 
+# Clean up, rebuild, run and check output.
 .PHONY: test
 test: clean run check-output
 
+# Clean up, run and check output (without rebuild).
 .PHONY: test-ci
 test-ci: clean run-ci check-output
 
+# Smoke check for output files.
 .PHONY: check-output
 check-output:
 	@grep '<title>GitStats - repo</title>' $(OUT_INDEX) >/dev/null || (echo "Unexpected content of $(OUT_INDEX)."; exit 1)
 
+# Clean up output files.
 .PHONY: clean
 clean:
 	find $(OUTDIR) -mindepth 1 -not -name .gitignore | xargs -l rm -fv
