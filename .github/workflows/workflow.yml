@@ -23,8 +23,7 @@ jobs:
       docker_image: jk4ger/gitstats
       docker_cache_in: /tmp/.buildx-cache
       docker_cache_out: /tmp/.buildx-cache-new
-      # TODO: This doesn't work!
-      is_publish: ${{github.event_name == 'push' && github.ref_type == 'tag'}}
+      is_publish: ${{((github.event_name == 'push' && github.ref_type == 'tag') && 'true') || 'false'}}
 
     steps:
       - name: Checkout sources
