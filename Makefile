@@ -9,7 +9,10 @@ ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 DOCKERIMAGE=jk4ger/gitstats:local
 DOCKERFILE=Dockerfile
 
+# Use the local repository for the test.
 REPO_DIR=$(ROOT_DIR)
+
+# Output directory.
 OUTDIR=$(ROOT_DIR)/out
 OUT_INDEX=$(OUTDIR)/index.html
 
