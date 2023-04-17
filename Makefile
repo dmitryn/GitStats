@@ -14,11 +14,14 @@ UID=$(shell id -u)
 GID=$(shell id -g)
 USER=$(UID):$(GID)
 
+.PHONY: build
 build:
 	docker build -t $(DOCKERIMAGE) --progress=plain .
 
+.PHONY: run
 run: build run-ci
 
+.PHONY: run-ci
 run-ci:
 	docker run \
       --user $(USER) \
@@ -27,14 +30,16 @@ run-ci:
       --rm \
       $(DOCKERIMAGE)
 
+.PHONY: test
 test: clean run check-output
 
+.PHONY: test-ci
 test-ci: clean run-ci check-output
 
+.PHONY: check-output
 check-output:
 	@grep '<title>GitStats - repo</title>' $(OUT_INDEX) >/dev/null || (echo "Unexpected content of $(OUT_INDEX)."; exit 1)
 
+.PHONY: clean
 clean:
 	find $(OUTDIR) -mindepth 1 -not -name .gitignore | xargs -l rm -fv
-
-.PHONY: build run test check-output clean
