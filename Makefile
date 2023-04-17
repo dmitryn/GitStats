@@ -9,6 +9,11 @@ REPO_DIR=$(ROOT_DIR)
 OUTDIR=$(ROOT_DIR)/out
 OUT_INDEX=$(OUTDIR)/index.html
 
+# Run with current user, otherwise the output files will be owned by root.
+UID=$(shell id -u)
+GID=$(shell id -g)
+USER=$(UID):$(GID)
+
 build:
 	docker build -t $(DOCKERIMAGE) --progress=plain .
 
@@ -16,7 +21,7 @@ run: build run-ci
 
 run-ci:
 	docker run \
-      --user $(shell id -u):$(shell id -g) \
+      --user $(USER) \
       -v "$(REPO_DIR):/repo:ro" \
       -v "$(OUTDIR):/out" \
       --rm \
