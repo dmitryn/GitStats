@@ -76,8 +76,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: ${{env.is_publish}}
-          load: ${{env.is_publish == false}}
+          push: ${{env.is_publish == true}}
+          load: ${{env.is_publish != true}}
           tags: |
             ${{env.docker_image}}:local
             ${{steps.meta.outputs.tags}}
@@ -86,11 +86,11 @@ jobs:
           cache-to: type=local,mode=max,dest=${{env.docker_cache_out}}
 
       - name: Test Docker image
-        if: env.is_publish == false
+        if: env.is_publish != true
         run: make test-ci
 
       - name: Publish output as build artifact
-        if: env.is_publish == false
+        if: env.is_publish != true
         uses: actions/upload-artifact@v3
         with:
           name: gitstats-output
