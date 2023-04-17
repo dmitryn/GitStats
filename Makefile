@@ -24,11 +24,11 @@ run: build run-ci
 .PHONY: run-ci
 run-ci:
 	docker run \
-      --user $(USER) \
-      -v "$(REPO_DIR):/repo:ro" \
-      -v "$(OUTDIR):/out" \
-      --rm \
-      $(DOCKERIMAGE)
+		--user $(USER) \
+		-v "$(REPO_DIR):/repo:ro" \
+		-v "$(OUTDIR):/out" \
+		--rm \
+		$(DOCKERIMAGE)
 
 .PHONY: test
 test: clean run check-output
