@@ -85,7 +85,7 @@ jobs:
         run: make test-ci
 
       - name: Publish output as build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: gitstats-output
           path: ./out
