@@ -85,5 +85,16 @@ jobs:
       - name: Print Docker version
         run: docker --version
 
+      - name: Print .git directory info
+        run: |
+          ls -ld .git
+          du -hc .git
+
+      - name: Dump git log
+        run: git log
+
+      - name: Run git gc
+        run: git gc
+
       - name: Test Docker image
         run: make test-ci
