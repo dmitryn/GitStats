@@ -1,7 +1,21 @@
 #!/bin/bash
 set -eu -o pipefail
 
-#git config --global --add safe.directory "$REPO_DIR"
+bailout() {
+  echo "ERROR: $1" >&2
+  exit 1
+}
+
+REPO_DIR="${REPO_DIR:-}"
+OUT_DIR="${OUT_DIR:-}"
+
+if [ ! -d "$REPO_DIR" ]; then
+  bailout "Invalid repository directory \"$REPO_DIR\"."
+fi
+
+if [ ! -d "$OUT_DIR" ]; then
+  bailout "Invalid output directory \"$OUT_DIR\"."
+fi
 
 cd "$REPO_DIR"
 exec python -u git-stats "$REPO_DIR" "$OUT_DIR"
