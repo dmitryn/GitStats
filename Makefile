@@ -8,7 +8,9 @@ OUT_INDEX=$(OUTDIR)/index.html
 build:
 	docker build -t $(DOCKERIMAGE) --progress=plain .
 
-run:
+run: build run-ci
+
+run-ci:
 	docker run \
       --user $(shell id -u):$(shell id -g) \
       -v "$(REPO_DIR):/repo:ro" \
@@ -17,6 +19,8 @@ run:
       $(DOCKERIMAGE)
 
 test: clean run check-output
+
+test-ci: clean run-ci check-output
 
 check-output:
 	@grep '<title>GitStats - repo</title>' $(OUT_INDEX) >/dev/null || (echo "Unexpected content of $(OUT_INDEX)."; exit 1)
