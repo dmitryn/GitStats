@@ -23,6 +23,7 @@ jobs:
       docker_image: jk4ger/gitstats
       docker_cache_in: /tmp/.buildx-cache
       docker_cache_out: /tmp/.buildx-cache-new
+      is_publish: ${{((github.event_name == 'push' && github.ref_type == 'tag') && 'true') || 'false'}}
 
     steps:
       - name: Checkout sources
@@ -74,8 +75,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: ${{github.event_name == 'push' && github.ref_type == 'tag'}}
-          load: true
+          push: ${{env.is_publish == 'true'}}
+          load: ${{env.is_publish == 'false'}}
           tags: |
             ${{env.docker_image}}:local
             ${{steps.meta.outputs.tags}}
@@ -84,9 +85,11 @@ jobs:
           cache-to: type=local,mode=max,dest=${{env.docker_cache_out}}
 
       - name: Test Docker image
+        if: env.is_publish == 'false'
         run: make test-ci
 
       - name: Publish output as build artifact
+        if: env.is_publish == 'false'
         uses: actions/upload-artifact@v3
         with:
           name: gitstats-output
