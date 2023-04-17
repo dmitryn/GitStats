@@ -1,7 +1,7 @@
 DOCKERIMAGE=jk4ger/gitstats:local
 DOCKERFILE=Dockerfile
 
-REPO_DIR=./
+REPO_DIR=.
 OUTDIR=./out
 OUT_INDEX=$(OUTDIR)/index.html
 
