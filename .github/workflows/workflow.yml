@@ -76,7 +76,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: ${{env.is_publish == true}}
+          push: ${{env.is_publish}}
           load: ${{env.is_publish != true}}
           tags: |
             ${{env.docker_image}}:local
