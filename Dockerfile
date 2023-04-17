@@ -21,4 +21,7 @@ COPY . .
 ENV REPO_DIR=/repo
 ENV OUT_DIR=/out
 
+# Avoid error in case the container user is not the owner of the repository directory.
+RUN git config --system --add safe.directory "$REPO_DIR"
+
 ENTRYPOINT tini -- ./docker-entrypoint.sh
