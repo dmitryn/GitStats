@@ -1,3 +1,5 @@
+SHELL = /bin/bash
+
 # Absolute path to directory containing this Makefile.
 # Older `docker run` versions do not support bind mounts with relative paths.
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
