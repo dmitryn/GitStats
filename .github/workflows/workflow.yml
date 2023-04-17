@@ -81,20 +81,12 @@ jobs:
           cache-from: type=local,src=${{env.docker_cache_in}}
           cache-to: type=local,mode=max,dest=${{env.docker_cache_out}}
 
-      # TODO: Debug step; remove when done.
-      - name: Print Docker version
-        run: docker --version
-
-      - name: Print .git directory info
-        run: |
-          ls -ld .git
-          du -hc .git
-
-      - name: Dump git log
-        run: git log
-
-      - name: Run git gc
-        run: git gc
-
       - name: Test Docker image
         run: make test-ci
+
+      - name: Publish output as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gitstats-output
+          path: ./out
+          retention-days: 3
