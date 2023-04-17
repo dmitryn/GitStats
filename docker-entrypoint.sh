@@ -18,4 +18,4 @@ if [ ! -d "$OUT_DIR" ]; then
 fi
 
 cd "$REPO_DIR"
-exec python -u git-stats "$REPO_DIR" "$OUT_DIR"
+exec python -u /app/git-stats "$REPO_DIR" "$OUT_DIR"
