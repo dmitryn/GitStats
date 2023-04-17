@@ -1,7 +1,9 @@
+# Makefile for building Docker image of gitstats.
+
 SHELL = /bin/bash
 
 # Absolute path to directory containing this Makefile.
-# Older `docker run` versions do not support bind mounts with relative paths.
+# Needed for older `docker run` versions which don't support bind mounts using relative paths.
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 DOCKERIMAGE=jk4ger/gitstats:local
