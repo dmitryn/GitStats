@@ -1,31 +1,59 @@
-PREFIX=/usr/local
-BINDIR=$(PREFIX)/bin
-RESOURCEDIR=$(PREFIX)/share/gitstats
-RESOURCES=gitstats.css sortable.js *.gif
-BINARIES=git-stats
-VERSION=$(shell git describe 2>/dev/null || git rev-parse --short HEAD)
-SEDVERSION=sed -ie 's/VERSION = 0/VERSION = "$(VERSION)"/'
+# Makefile for building Docker image of gitstats.
 
-all: help
+SHELL = /bin/bash
 
-help:
-	@echo "Usage:"
-	@echo
-	@echo "make install                   # install to ${PREFIX}"
-	@echo "make install PREFIX=~          # install to ~"
-	@echo "make release [VERSION=foo]     # make a release tarball"
-	@echo
+# Absolute path to directory containing this Makefile.
+# Needed for older `docker run` versions which don't support bind mounts using relative paths.
+ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-install:
-	install -d $(BINDIR) $(RESOURCEDIR)
-	install -v $(BINARIES) $(BINDIR)
-	install -v -m 644 $(RESOURCES) $(RESOURCEDIR)
-	$(SEDVERSION) $(BINDIR)/git-stats
+# Name and tag of the Docker image to be built.
+DOCKERIMAGE=jk4ger/gitstats:local
 
-release:
-	@cp git-stats git-stats.tmp
-	@$(SEDVERSION) git-stats.tmp
-	@tar --owner=0 --group=0 --transform 's!^!gitstats/!' --transform 's!gitstats.tmp!gitstats!' -zcf gitstats-$(VERSION).tar.gz git-stats.tmp $(RESOURCES) doc/ Makefile
-	@$(RM) git-stats.tmp
+# Use the local repository for the test.
+REPO_DIR=$(ROOT_DIR)
 
-.PHONY: all help install release
+# Output directory.
+OUTDIR=$(ROOT_DIR)/out
+OUT_INDEX=$(OUTDIR)/index.html
+
+# Run with current user, otherwise the output files will be owned by root.
+UID=$(shell id -u)
+GID=$(shell id -g)
+USER=$(UID):$(GID)
+
+# Build the Docker image.
+.PHONY: build
+build:
+	docker build -t $(DOCKERIMAGE) --progress=plain .
+
+# Rebuild and run.
+.PHONY: run
+run: build run-ci
+
+# Run (without rebuild).
+.PHONY: run-ci
+run-ci:
+	docker run \
+		--user $(USER) \
+		-v "$(REPO_DIR):/repo:ro" \
+		-v "$(OUTDIR):/out" \
+		--rm \
+		$(DOCKERIMAGE)
+
+# Clean up, rebuild, run and check output.
+.PHONY: test
+test: clean run check-output
+
+# Clean up, run and check output (without rebuild).
+.PHONY: test-ci
+test-ci: clean run-ci check-output
+
+# Smoke check for output files.
+.PHONY: check-output
+check-output:
+	@grep '<title>GitStats - repo</title>' $(OUT_INDEX) >/dev/null || (echo "Unexpected content of $(OUT_INDEX)."; exit 1)
+
+# Clean up output files.
+.PHONY: clean
+clean:
+	find $(OUTDIR) -mindepth 1 -not -name .gitignore | xargs -l rm -fv

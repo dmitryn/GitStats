@@ -14,8 +14,8 @@ import sys
 import time
 import zlib
 
-IMAGE_TYPE = 'svg'  # everything that gnuplot accepts, I guess 
-GNUPLOT_IMAGE_SPECIFICATIONS = {'svg':'','png':'transparent'} 
+IMAGE_TYPE = 'svg'  # everything that gnuplot accepts, I guess
+GNUPLOT_IMAGE_SPECIFICATIONS = {'svg':'','png':'transparent'}
 
 GNUPLOT_COMMON = 'set terminal {0} {1}\nset size 1.0,0.5\n'.format(IMAGE_TYPE, GNUPLOT_IMAGE_SPECIFICATIONS[IMAGE_TYPE] )
 ON_LINUX = (platform.system() == 'Linux')
@@ -76,13 +76,13 @@ class DataCollector:
 	def __init__(self):
 		self.stamp_created = time.time()
 		self.cache = {}
-	
+
 	##
 	# This should be the main function to extract data from the repository.
 	def collect(self, dir):
 		self.dir = dir
 		self.projectname = os.path.basename(os.path.abspath(dir))
-	
+
 	##
 	# Load cacheable data
 	def loadCache(self, cachefile):
@@ -97,7 +97,7 @@ class DataCollector:
 			f.seek(0)
 			self.cache = pickle.load(f)
 		f.close()
-	
+
 	##
 	# Produce any additional statistics from the extracted data.
 	def refine(self):
@@ -107,7 +107,7 @@ class DataCollector:
 	# : get a dictionary of author
 	def getAuthorInfo(self, author):
 		return None
-	
+
 	def getActivityByDayOfWeek(self):
 		return {}
 
@@ -122,31 +122,31 @@ class DataCollector:
 	# Get a list of authors
 	def getAuthors(self):
 		return []
-	
+
 	def getFirstCommitDate(self):
 		return datetime.datetime.now()
-	
+
 	def getLastCommitDate(self):
 		return datetime.datetime.now()
-	
+
 	def getStampCreated(self):
 		return self.stamp_created
-	
+
 	def getTags(self):
 		return []
-	
+
 	def getTotalAuthors(self):
 		return -1
-	
+
 	def getTotalCommits(self):
 		return -1
-		
+
 	def getTotalFiles(self):
 		return -1
-	
+
 	def getTotalLOC(self):
 		return -1
-	
+
 	##
 	# Save cacheable data
 	def saveCache(self, cachefile):
@@ -428,7 +428,7 @@ class GitDataCollector(DataCollector):
 					(files, inserted, deleted) = (0, 0, 0)
 				#self.changes_by_date[stamp] = { 'files': files, 'ins': inserted, 'del': deleted }
 		self.total_lines = total_lines
-	
+
 	def refine(self):
 		# authors
 		# name -> {place_by_commits, commits_frac, date_first, date_last, timedelta}
@@ -446,7 +446,7 @@ class GitDataCollector(DataCollector):
 			a['date_first'] = date_first.strftime('%Y-%m-%d')
 			a['date_last'] = date_last.strftime('%Y-%m-%d')
 			a['timedelta'] = delta
-	
+
 	def getActiveDays(self):
 		return self.active_days
 
@@ -458,12 +458,12 @@ class GitDataCollector(DataCollector):
 
 	def getAuthorInfo(self, author):
 		return self.authors[author]
-	
+
 	def getAuthors(self, limit = None):
 		res = getkeyssortedbyvaluekey(self.authors, 'commits')
 		res.reverse()
 		return res[:limit]
-	
+
 	def getCommitDeltaDays(self):
 		return (self.last_commit_stamp - self.first_commit_stamp) / 86400 + 1
 
@@ -472,7 +472,7 @@ class GitDataCollector(DataCollector):
 
 	def getDomains(self):
 		return self.domains.keys()
-	
+
 	def getFilesInCommit(self, rev):
 		try:
 			res = self.cache['files_in_tree'][rev]
@@ -486,10 +486,10 @@ class GitDataCollector(DataCollector):
 
 	def getFirstCommitDate(self):
 		return datetime.datetime.fromtimestamp(self.first_commit_stamp)
-	
+
 	def getLastCommitDate(self):
 		return datetime.datetime.fromtimestamp(self.last_commit_stamp)
-	
+
 	def getLinesInBlob(self, sha1):
 		try:
 			res = self.cache['lines_in_blob'][sha1]
@@ -503,22 +503,22 @@ class GitDataCollector(DataCollector):
 	def getTags(self):
 		lines = getpipeoutput(['git show-ref --tags', 'cut -d/ -f3'])
 		return lines.split('\n')
-	
+
 	def getTagDate(self, tag):
 		return self.revToDate('tags/' + tag)
-	
+
 	def getTotalAuthors(self):
 		return self.total_authors
-	
+
 	def getTotalCommits(self):
 		return self.total_commits
 
 	def getTotalFiles(self):
 		return self.total_files
-	
+
 	def getTotalLOC(self):
 		return self.total_lines
-	
+
 	def revToDate(self, rev):
 		stamp = int(getpipeoutput(['git log --pretty=format:%%at "%s" -n 1' % rev]))
 		return datetime.datetime.fromtimestamp(stamp).strftime('%Y-%m-%d')
@@ -527,7 +527,7 @@ class ReportCreator:
 	"""Creates the actual report based on given data."""
 	def __init__(self):
 		pass
-	
+
 	def create(self, data, path):
 		self.data = data
 		self.path = path
@@ -859,7 +859,7 @@ class HTMLReportCreator(ReportCreator):
 		#for stamp in sorted(data.files_by_stamp.keys()):
 		#	fg.write('%s %d\n' % (datetime.datetime.fromtimestamp(stamp).strftime('%Y-%m-%d'), data.files_by_stamp[stamp]))
 		fg.close()
-			
+
 		f.write('<img src="files_by_date.{0}" alt="Files by Date" />'.format(IMAGE_TYPE))
 
 		#f.write('<h2>Average file size by date</h2>')
@@ -870,7 +870,7 @@ class HTMLReportCreator(ReportCreator):
 		for ext in sorted(data.extensions.keys()):
 			files = data.extensions[ext]['files']
 			lines = data.extensions[ext]['lines']
-			f.write('<tr><td>%s</td><td>%d (%.2f%%)</td><td>%d (%.2f%%)</td><td>%d</td></tr>' % (ext, files, (100.0 * files) / data.getTotalFiles(), lines, (100.0 * lines) / data.getTotalLOC(), lines / files))
+			f.write('<tr><td>%s</td><td>%d (%.2f%%)</td><td>%d (%.2f%%)</td><td>%d</td></tr>' % (ext, files, self.calculate_percentage(files, data.getTotalFiles()), lines, self.calculate_percentage(lines, data.getTotalLOC()), lines / files if files >= 0 else 0))
 		f.write('</table>')
 
 		f.write('</body></html>')
@@ -927,7 +927,14 @@ class HTMLReportCreator(ReportCreator):
 		f.close()
 
 		self.createGraphs(path)
-	
+
+	def calculate_percentage(self, numerator, denominator):
+		if denominator == 0:
+			return 0.0
+		else:
+			return (100.0 * numerator) / denominator
+
+
 	def createGraphs(self, path):
 		print 'Generating graphs...'
 
@@ -1094,7 +1101,7 @@ plot 'lines_of_code.dat' using 1:2 w lines
 </ul>
 </div>
 """)
-		
+
 
 class GitStats:
 	def run(self, args_orig):
@@ -1160,4 +1167,3 @@ Default config values:
 
 g = GitStats()
 g.run(sys.argv[1:])
-
