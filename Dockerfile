@@ -7,7 +7,8 @@ ENV PYTHONUNBUFFERED=1
 
 RUN apk update && \
     apk add --no-cache \
-      git  \
+      bash \
+      git \
       gnuplot \
       python2 && \
     rm -rfv /var/cache/apk/* && \
