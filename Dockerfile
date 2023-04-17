@@ -10,7 +10,8 @@ RUN apk update && \
       bash \
       git \
       gnuplot \
-      python2 && \
+      python2 \
+      tini && \
     rm -rfv /var/cache/apk/* && \
     python --version
 
@@ -20,5 +21,4 @@ COPY . .
 ENV REPO_DIR=/repo
 ENV OUT_DIR=/out
 
-RUN git config --global --add safe.directory $REPO_DIR
-ENTRYPOINT exec python -u git-stats $REPO_DIR $OUT_DIR
+ENTRYPOINT tini -- ./docker-entrypoint.sh
