@@ -10,10 +10,10 @@ See the [original README](README.original.md) for documentation of gitstats itse
 Run with Docker:
 ```bash
 # Path to git repository.
-REPO_DIR="./"
+REPO_DIR=$(pwd)
 
 # Path to output directory.
-OUTPUT_DIR="./out"
+OUTPUT_DIR="$(pwd)/out"
 
 # Run with the current user, to ensure that the output files
 # are owned by the user and not by root.

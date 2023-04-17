@@ -1,8 +1,12 @@
+# Absolute path to directory containing this Makefile.
+# Older `docker run` versions do not support bind mounts with relative paths.
+ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 DOCKERIMAGE=jk4ger/gitstats:local
 DOCKERFILE=Dockerfile
 
-REPO_DIR=.
-OUTDIR=./out
+REPO_DIR=$(ROOT_DIR)
+OUTDIR=$(ROOT_DIR)/out
 OUT_INDEX=$(OUTDIR)/index.html
 
 build:
