@@ -6,8 +6,8 @@ SHELL = /bin/bash
 # Needed for older `docker run` versions which don't support bind mounts using relative paths.
 ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
+# Name and tag of the Docker image to be built.
 DOCKERIMAGE=jk4ger/gitstats:local
-DOCKERFILE=Dockerfile
 
 # Use the local repository for the test.
 REPO_DIR=$(ROOT_DIR)
