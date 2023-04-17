@@ -30,3 +30,18 @@ docker run \
 # Open report in browser.
 xdg-open "$OUTPUT_DIR/index.html"
 ```
+
+## Development
+Prerequisites:
+- Docker
+- GNU make
+
+Build the Docker image locally and run on this repository with output to [`./out`](/out):
+```bash
+make run
+```
+
+Run smoke test:
+```bash
+make test
+```
