@@ -11,8 +11,7 @@ Run with Docker:
 ```bash
 # Path to git repository.
 REPO_DIR=$(pwd)
-
-# Path to output directory.
+# Output directory for report. 
 OUTPUT_DIR="$(pwd)/out"
 
 # Run with the current user, to ensure that the output files
@@ -20,6 +19,7 @@ OUTPUT_DIR="$(pwd)/out"
 CONTAINER_USER=$(id -u):$(id -g)
 
 # Generate report in output directory.
+mkdir -p "$OUTPUT_DIR" && \
 docker run \
   -v "$REPO_DIR:/repo:ro" \
   -v "$OUTPUT_DIR:/out" \
