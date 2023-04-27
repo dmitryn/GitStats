@@ -13,7 +13,7 @@ if [ ! -d "$REPO_DIR" ]; then
   bailout "Invalid repository directory \"$REPO_DIR\"."
 fi
 
-if [ ! -d "$OUT_DIR" ]; then
+if [ ! -w "$OUT_DIR" ]; then
   bailout "Invalid output directory \"$OUT_DIR\"."
 fi
 
